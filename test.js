@@ -1,7 +1,7 @@
 
 async function getData(starter_nb) {
     let list = []
-    const url = "https://pokeapi.co/api/v2/pokedex/34";
+    const url = "https://pokeapi.co/api/v2/pokedex/36";
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -26,7 +26,7 @@ async function getData(starter_nb) {
 }
 
 async function getPokemonById(id) {
-    const url = "https://tyradex.vercel.app/api/v1/pokemon/" + id;
+    const url = "https://tyradex.app/api/v1/pokemon/" + id;
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -55,8 +55,9 @@ function isShiny() {
   }
 }
 
-function showPokemon(pokemon) {
-  let poke = '<div class="pokemon">'
+async function showPokemon(pokemon) {
+  var template = document.createElement('template')
+  template.innerHTML = await(await fetch('/pokemon.html')).text()
 
   const shinyornot = isShiny()
   let sprite
@@ -65,27 +66,24 @@ function showPokemon(pokemon) {
   } else {
     sprite = pokemon.sprites.regular
   }
-  poke += '<img class="pkmn_img" src="' + sprite + '" alt="' + pokemon.name.fr + ' image">' + "<br><br>"
-
-  poke += "<p>" + pokemon.name.fr + "</p><br>"
-
-  poke += "<p>Génération " + pokemon.generation + "</p><br>"
-
-  poke += "<p>Pokédex #" + pokemon.pokedex_id + "</p><br>"
-
-  poke += '<img src="' + pokemon.types[0].image + '" alt="' + pokemon.name.fr + ' image">' + " "
+  template.content.querySelector('.pkmn_img').innerHTML = '<img class="pkmn_sprite" src="' + sprite + '" alt="' + pokemon.name.fr + ' image">'
+  template.content.querySelector('.pkmn_type1').innerHTML = '<img src="' + pokemon.types[0].image + '" alt="' + pokemon.name.fr + ' image">'
   if (pokemon.types[1]) {
-    poke += '<img src="' + pokemon.types[1].image + '" alt="' + pokemon.name.fr + ' image">'
+    template.content.querySelector('.pkmn_type2').innerHTML = '<img src="' + pokemon.types[1]?.image + '" alt="' + pokemon.name.fr + ' image">'
   }
-  poke += "<br><br>"
-
+  template.content.querySelector('.pkmn_name').innerHTML = pokemon.name.fr
+  template.content.querySelector('.pkmn_gen').innerHTML += pokemon.generation
+  template.content.querySelector('.pkmn_id').innerHTML += pokemon.pokedex_id
+  pokemon.talents.forEach(element => {
+    template.content.querySelector('.pkmn_abilities').innerHTML += element.name + " "
+  });
+  template.content.querySelector('.pkmn_weight').innerHTML += pokemon.weight
+  template.content.querySelector('.pkmn_height').innerHTML += pokemon.height
   const BST = pokemon.stats.hp + pokemon.stats.atk + pokemon.stats.def + pokemon.stats.spe_atk + pokemon.stats.spe_def + pokemon.stats.vit
-  poke += "<p>Total stats = " + BST + "</p><br>"
-
-  poke += "</div>"
+  template.content.querySelector('.pkmn_bst').innerHTML += BST
 
   var pokemons = document.getElementById('pokemons');
-  pokemons.innerHTML += poke
+  pokemons.innerHTML += template.innerHTML
 }
 
 

@@ -1,0 +1,1 @@
+data from pokeapi.co and https://tyradex.app/

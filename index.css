@@ -69,7 +69,10 @@ input {
     text-align: center;
     flex: 1;
     margin: 20px;
+}
 
+.pokemon > :last-child {
+  padding-bottom: 10px;
 }
 
 #pokemons {
@@ -78,6 +81,11 @@ input {
   grid-template-columns: 1fr 1fr 1fr;
 }
 
-.pkmn_img {
-    width: 50%;
+.pkmn_type1, .pkmn_type2 {
+  display: inline-block;
+}
+
+
+.pkmn_sprite {
+    width: 70%;
 }
