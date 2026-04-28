@@ -57,7 +57,7 @@ function isShiny() {
 
 async function showPokemon(pokemon) {
   var template = document.createElement('template')
-  template.innerHTML = await(await fetch('/pokemon.html')).text()
+  template.innerHTML = await(await fetch('./pokemon.html')).text()
 
   const shinyornot = isShiny()
   let sprite
